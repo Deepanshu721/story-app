@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="description" content="बच्चों के लिए 10 रंग-बिरंगी हिंदी कहानियाँ, जिनमें इंटरैक्टिव विकल्प और हिंदी में read aloud फीचर शामिल है।">
+  <meta name="theme-color" content="#ffd84d">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="format-detection" content="telephone=no">
+  <title>नन्ही कहानियाँ | बच्चों के लिए हिंदी स्टोरी ऐप</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="mobile-app">
+    <header class="app-topbar" aria-label="ऐप शीर्ष नेविगेशन">
+      <span class="app-topbar__badge" aria-hidden="true">📚</span>
+      <h1>नन्ही कहानियाँ</h1>
+      <button
+        id="randomStoryButton"
+        class="app-topbar__action"
+        type="button"
+        aria-label="रैंडम कहानी खोलें"
+        title="Surprise me"
+      >
+        🎁
+      </button>
+    </header>
+
+    <main class="app-main">
+      <section id="homeSection" class="view view--active" aria-labelledby="storiesHeading">
+        <h2 id="storiesHeading" class="sr-only">नन्ही कहानियाँ स्टोरी सूची</h2>
+        <div id="storyGrid" class="story-grid" aria-live="polite"></div>
+      </section>
+
+      <section id="storySection" class="view" hidden aria-labelledby="storyTitle">
+        <article class="story-reader">
+          <div class="story-reader__poster">
+            <img id="storyHeroImage" class="story-reader__hero-image" src="" alt="">
+          </div>
+
+          <div class="story-reader__panel">
+            <div class="story-reader__header">
+              <span id="storyType" class="story-badge"></span>
+              <h2 id="storyTitle">कहानी</h2>
+              <p id="storySubtitle" class="story-subtitle"></p>
+            </div>
+
+            <div class="speech-box" aria-label="कहानी सुनाने के कंट्रोल">
+              <div class="speech-controls">
+                <button id="playButton" type="button" class="control-button">▶ Play</button>
+                <button id="pauseButton" type="button" class="control-button control-button--soft">⏸ Pause</button>
+                <button id="stopButton" type="button" class="control-button control-button--soft">⏹ Stop</button>
+              </div>
+              <p id="speechStatus" class="sr-only" aria-live="polite"></p>
+            </div>
+
+            <div id="storyContent" class="story-content"></div>
+
+            <section id="interactivePanel" class="interactive-panel" hidden aria-live="polite">
+              <h3 id="interactiveQuestion"></h3>
+              <div id="interactiveChoices" class="interactive-choices"></div>
+              <button id="resetChoiceButton" class="reset-choice-button" type="button" hidden>
+                🔁 दूसरी राह चुनें
+              </button>
+            </section>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
