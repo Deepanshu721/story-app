@@ -328,6 +328,41 @@ function createIllustration({
     `
     : "";
 
+  // Add sparkles SVG group
+  const sparkles = `
+    <g opacity="0.7">
+      <circle cx="200" cy="120" r="7" fill="#fffbe7" />
+      <circle cx="700" cy="180" r="5" fill="#fffbe7" />
+      <circle cx="400" cy="80" r="4" fill="#fffbe7" />
+      <circle cx="600" cy="100" r="6" fill="#fffbe7" />
+      <circle cx="500" cy="200" r="3" fill="#fffbe7" />
+    </g>
+  `;
+
+  // Add vignette overlay
+  const vignette = `
+    <radialGradient id="vignette" cx="50%" cy="50%" r="80%">
+      <stop offset="60%" stop-color="rgba(0,0,0,0)" />
+      <stop offset="100%" stop-color="rgba(0,0,0,0.18)" />
+    </radialGradient>
+    <rect width="900" height="620" fill="url(#vignette)" />
+  `;
+
+  // Add drop shadow and glow filter
+  const filters = `
+    <filter id="emojiShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000" flood-opacity="0.22" />
+      <feDropShadow dx="0" dy="0" stdDeviation="18" flood-color="${accent}" flood-opacity="0.38" />
+    </filter>
+    <filter id="emojiGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="18" result="coloredBlur" />
+      <feMerge>
+        <feMergeNode in="coloredBlur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  `;
+
   return svgToDataUri(`
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" role="img" aria-label="${safeTitle}">
       <defs>
@@ -343,6 +378,8 @@ function createIllustration({
           <stop offset="0%" stop-color="rgba(255,255,255,0.28)" />
           <stop offset="100%" stop-color="rgba(255,255,255,0.08)" />
         </linearGradient>
+        ${vignette}
+        ${filters}
       </defs>
       <rect width="900" height="620" rx="42" fill="url(#sky)" />
       <circle cx="132" cy="108" r="54" fill="rgba(255,255,255,0.45)" />
@@ -369,11 +406,15 @@ function createIllustration({
       <rect x="162" y="182" width="576" height="240" rx="120" fill="rgba(255,255,255,0.18)" />
       <circle cx="450" cy="302" r="132" fill="rgba(255,255,255,0.34)" />
       <circle cx="450" cy="302" r="104" fill="rgba(255,255,255,0.14)" />
-      <text x="450" y="336" text-anchor="middle" font-size="${mainEmojiSize}">${emoji}</text>
+      <g filter="url(#emojiShadow)">
+        <text x="450" y="336" text-anchor="middle" font-size="${mainEmojiSize}" filter="url(#emojiGlow)">${emoji}</text>
+      </g>
       ${companionEmoji ? `<text x="276" y="338" text-anchor="middle" font-size="${sideEmojiSize}" opacity="0.95">${companionEmoji}</text>` : ""}
       ${detailEmoji ? `<text x="626" y="330" text-anchor="middle" font-size="${sideEmojiSize}" opacity="0.95">${detailEmoji}</text>` : ""}
       <rect x="178" y="456" width="544" height="78" rx="30" fill="rgba(255,255,255,0.74)" />
       <text x="450" y="504" text-anchor="middle" font-size="38" font-family="Verdana, sans-serif" fill="#2b2551">${safeTitle}</text>
+      ${sparkles}
+      <rect width="900" height="620" fill="url(#vignette)" />
     </svg>
   `);
 }
@@ -410,7 +451,7 @@ function openRandomStory() {
 function renderStoryCards() {
   storyGrid.innerHTML = "";
 
-  stories.forEach((story) => {
+  stories.forEach((story, idx) => {
     const card = document.createElement("article");
     const button = document.createElement("button");
     const metaLabel = story.interactive ? "🎮 Interactive" : "📖 कहानी";
@@ -460,6 +501,15 @@ function renderStoryCards() {
 
     card.querySelector(".story-card__body").appendChild(button);
     storyGrid.appendChild(card);
+
+    // Insert ad placeholder after every 3 cards
+    if ((idx + 1) % 3 === 0 && idx !== stories.length - 1) {
+      const adDiv = document.createElement("div");
+      adDiv.className = "ad-placeholder ad-between-cards";
+      adDiv.style = "width:100%;text-align:center;margin:18px 0;";
+      adDiv.innerHTML = '<span style="background:#ffd84d;padding:8px 24px;border-radius:12px;color:#2b2551;font-weight:bold;">[Ad Between Cards]</span>';
+      storyGrid.appendChild(adDiv);
+    }
   });
 }
 
